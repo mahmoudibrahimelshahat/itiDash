@@ -1,0 +1,171 @@
+<!-- 
+<div class="bg-slate-300 py-9">
+ 
+    <form class=" form-group capitalize grid grid-cols-12 gap-x-10 gap-y-5 mb-4   " action="">
+    
+        <div class="flex flex-col col-start-1 col-span-6">
+            <label>product name</label>
+            <input type="text" class="py-2">
+        </div>
+        <div class="flex flex-col row-start-2  row-span-2 col-start-1 col-span-6">
+            <label>description</label>
+            <textarea class="resize-none py-2" rows="4"></textarea>
+        </div>
+        <div class="flex flex-col col-start-7 col-span-6">
+            <label>category name</label>
+            <input type="text" class="py-2">
+        </div>
+        <div class="flex flex-col row-start-2 row-span-2 col-start-7  col-span-6  ">
+            <label>price</label>
+            <input type="text" class="py-2">
+        </div>
+        <div class="flex flex-col  row-start-4 col-start-1  col-span-2 ">
+            <span class="pb-1">add image</span>
+            <label class=" border-slate-500 border-[1px] px-3 py-1 text-slate-800 rounded-sm cursor-pointer ">
+                <input type="file" class="hidden" />
+                Upload image
+            </label>
+        </div>
+        
+        
+        
+    </form>
+    <div class="flex justify-center">
+    
+        <button class=" capitalize bg-slate-500 px-10 py-1  text-white rounded-md ">add product</button>
+    </div>
+</div> -->
+
+<div #modal class=" fixed left-0 top-0 bottom-0 bg-black bg-opacity-30 w-full z-40 flex items-center   ">
+    <div class=" mb-7 p-6 rounded-xl shadow-lg  w-[450px] sm:w-[550px] m-auto  bg-white overflow-y-auto h-[90%] bg ">
+        <div class="flex justify-between items-baseline mb-10 ">
+            <div *ngIf="switchAction" class="text-xl text-gray-500">Add New Product</div>
+            <div *ngIf="!switchAction" class="text-xl text-gray-500">update Product</div>
+            <div class="cursor-pointer border-[0.3px] hover:bg-[#ff893b] px-3 py-1 rounded-md text-lg hover:text-white hover:border-white duration-200"
+                (click)="closeModal(modal)">x</div>
+        </div>
+        <form [formGroup]="productForm" class=" capitalize  ">
+            <div class=" mb-10 ">
+                <div class=" input--group">
+                    <input
+                        [ngClass]="{'test':!proName?.valid, 'border-gray-300':proName?.untouched ,'border-red-600':!proName?.valid&&proName?.touched ,'border-blue-400':proName?.valid}"
+                        formControlName="name"
+                        class=" mt-2 block w-full px-[10px] py-1.5 text-base font-normal   text-gray-700 bg-white  border border-solid  rounded outline-none   ">
+                    <label [ngClass]="{'input--label':!proName?.valid ,'labelX':proName?.valid}"
+                        class="label text-gray-700 input--label">product name</label>
+
+                </div>
+                <div [hidden]="proName?.valid||proName?.untouched" class="text-red-600 ">
+                    <small *ngIf="proName?.errors?.['required']"> required</small>
+                </div>
+            </div>
+
+
+            <div class=" mb-10">
+                <div class="input--group">
+                    <select
+                        [ngClass]="{'test':!catName?.valid, 'border-gray-300':catName?.untouched ,'border-red-600':!catName?.valid&&catName?.touched ,'border-blue-400':catName?.valid}"
+                        type="text" formControlName="category"
+                        class=" cursor-text mt-2 block w-full px-1 py-1.5 text-base font-normal  text-gray-700 bg-white border  rounded outline-none">
+                        <option class=" cursor-pointer text-base font-normal  text-gray-600 bg-white  rounded"
+                            *ngFor="let cat of categriesList" value={{cat._id}}>{{cat.name}}</option>
+                    </select>
+                    <label [ngClass]="{'input--label':!catName?.valid ,'labelX':catName?.valid}"
+                        class="label text-gray-700 input--label ">category name</label>
+                    <div [hidden]="catName?.valid||catName?.untouched" class="text-red-600 ">
+                        <small *ngIf="catName?.errors?.['required']"> required</small>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class=" mb-10">
+                <div class="input--group">
+                    <input
+                        [ngClass]="{'test':!stock?.valid, 'border-gray-300':stock?.untouched ,'border-red-600':!stock?.valid&&stock?.touched ,'border-blue-400 ':stock?.valid}"
+                        type="number" formControlName="countInStock"
+                        class="mt-2 block w-full px-1 py-1.5 text-base font-normal  text-gray-700 bg-white bg-clip-padding border border-solid rounded outline-none">
+                    <label [ngClass]="{'input--label':!stock?.valid ,'labelX':stock?.valid}"
+                        class="label text-gray-700 input--label">no.of items</label>
+                </div>
+                <div [hidden]="stock?.valid||stock?.untouched" class="text-red-600 ">
+                    <small *ngIf="stock?.errors?.['required']"> required</small>
+                </div>
+            </div>
+
+            <div class=" mb-10">
+                <div class="input--group">
+                    <input
+                        [ngClass]="{'test':!price?.valid, 'border-gray-300':price?.untouched ,'border-red-600':!price?.valid&&price?.touched ,'border-blue-400':price?.valid}"
+                        type="number" formControlName="price"
+                        class="mt-2 block w-full px-1 py-1.5 text-base font-normal  text-gray-700 bg-white bg-clip-padding border border-solid rounded outline-none">
+                    <label [ngClass]="{'input--label':!price?.valid ,'labelX':price?.valid}"
+                        class="label text-gray-700 input--label">price</label>
+                </div>
+                <div [hidden]="price?.valid||price?.untouched" class="text-red-600 ">
+                    <small *ngIf="price?.errors?.['required']"> required</small>
+                </div>
+            </div>
+            <div class=" mb-0">
+                <div class="input--group">
+                    <select
+                        [ngClass]="{'test':!isFeatured?.valid, 'border-gray-300':isFeatured?.untouched ,'border-red-600':!isFeatured?.valid&&isFeatured?.touched ,'border-blue-400':isFeatured?.valid}"
+                        type="text" formControlName="isFeatured"
+                        class=" cursor-text mt-2 block w-full px-1 py-1.5 text-base font-normal  text-gray-700 bg-white border  rounded outline-none">
+                        <option class=" cursor-pointer text-base font-normal  text-gray-600 bg-white  rounded"
+                            value="true">featured</option>
+                        <option class=" cursor-pointer text-base font-normal  text-gray-600 bg-white  rounded"
+                            value="false">not featured</option>
+                    </select>
+                    <label [ngClass]="{'input--label':!isFeatured?.valid ,'labelX':isFeatured?.valid}"
+                        class="label text-gray-700 input--label ">Featured or not</label>
+                    <div [hidden]="isFeatured?.valid||isFeatured?.untouched" class="text-red-600 ">
+                        <small *ngIf="isFeatured?.errors?.['required']"> required</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class=" mb-10 ">
+                <div class="input--group  pt-10">
+                    <textarea formControlName="description"
+                        [ngClass]="{'test':!desc?.valid, 'border-gray-300':desc?.untouched ,'border-red-600':!desc?.valid&&desc?.touched ,'border-blue-400':desc?.valid}"
+                        class="mt-2 block w-full px-1 py-1.5 text-base font-normal  text-gray-700 bg-white bg-clip-padding border border-solid rounded outline-none"
+                        rows="3"></textarea>
+                    <label [ngClass]="{'input--label':!desc?.valid ,'labelX':desc?.valid}"
+                        class="label text-gray-700 input--label">description</label>
+                </div>
+                <div [hidden]="desc?.valid||desc?.untouched" class="text-red-600 ">
+                    <small *ngIf="desc?.errors?.['required']"> required</small>
+                </div>
+            </div>
+
+            <div class=" flex flex-col ">
+                <span class=" pb-1 text-[#838383]">add image</span>
+                <label class=" px-1 py-2  border-[0.5px] border-[#ff893b] text-slate-800 rounded-md text-center cursor-pointer w-4/12 ">
+                    <input type="file" multiple class="hidden" #filePicker (change)="uploadFile($event)"     /><i class=" bi
+                        bi-upload"></i>
+                    Upload image
+                </label>
+                <div [hidden]="img?.valid||img?.untouched" class="text-red-600 ">
+                    <small *ngIf="img?.errors?.['required']"> required</small>
+                </div>
+                <div class="p-col-2 p-mt-2 p-pl-0 w-[200px] ">
+                    <img  [src]="displayImage" alt="" class="w-full">
+                </div>
+            </div>
+
+
+            <div class=" flex justify-end mt-6">
+                <button (click)="submit(modal)" *ngIf="switchAction" type="submit" [disabled]="productForm.invalid"
+                    class=" disabled:cursor-not-allowed px-7 py-2.5 bg-[#ff893b]  text-white font-medium text-xs leading-tight uppercase rounded shadow-md">save</button>
+                <button (click)="updateProduct(modal)" *ngIf="!switchAction" type="submit"
+                    [disabled]="productForm.invalid"
+                    class=" disabled:cursor-not-allowed px-7 py-2.5 bg-[#ff893b]  text-white font-medium text-xs leading-tight uppercase rounded shadow-md">update</button>
+                <button (click)="closeModal(modal)" type="button"
+                    class=" px-6 py-2.5 ml-3  font-medium text-xs leading-tight uppercase rounded shadow-md border-[0.5px] border-[#ff893b]">Cancle</button>
+            </div>
+        </form>
+
+    </div>
+
+</div>

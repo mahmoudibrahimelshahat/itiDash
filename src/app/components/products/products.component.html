@@ -1,0 +1,86 @@
+<div class=" container m-auto pb-6 overflow-x-auto ">
+    <div class="flex justify-end  mb-10  ">
+        <button
+            class="capitalize border-[0.5px] px-5 py-2 ml-5 text-slate-800 border-[#ff893b] bg-white rounded-md font-medium hover:bg-[#ff893b] hover:text-white  transition-all duration-150"
+            (click)="openModal()">
+            add new +
+        </button>
+    </div>
+    <div class=" overflow-x-auto shadow-md w-full rounded-xl bg-white flex-col  ">
+        <table class=" w-full text-left bg-white capitalize text-gray-700  md:text-base text-sm">
+            <thead class="text-sm uppercase   ">
+                <tr class="border-slate-100 bg-[#fdfdfd]  text-left text-slate-500  ">
+                    <th scope="col" class="px-6 py-5  pl-5">name
+                        <i class="bi bi-caret-up-fill x px-2 inline-block cursor-pointer"
+                            (click)="sortByName($event)"></i>
+                    </th>
+                    <th scope="col" class="px-6 py-3 min-w-max  ">description</th>
+                    <th scope="col" class="px-6 py-3">category</th>
+                    <th scope="col" class="px-6 py-3 "> price
+                        <i class="bi bi-caret-up-fill x px-2 inline-block cursor-pointer"
+                            (click)="sortByPrice($event)"></i>
+
+                    </th>
+                    <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                        stock
+
+                        <i class="bi bi-caret-up-fill x px-2 inline-block cursor-pointer"
+                            (click)="sortByStock($event)"></i>
+                    </th>
+                    <th scope="colgroup" class="px-6 py-3 "> action</th>
+                </tr>
+            </thead>
+            <tbody class="">
+                <tr class="  border-t-[0.5px] " *ngFor="let product of productList  |paginate: { id:'listig-products',
+                itemsPerPage: 8,
+                currentPage: page,
+                totalItems: totalProducts}">
+                    <td class="flex items-center pl-6 pr-10 py-3 whitespace-nowrap   ">
+                        <img class="w-10 h-10 rounded-full" [src]="product.image">
+                        <div class=" ml-3">{{product.name}}</div>
+
+                    </td>
+
+                    <td class="px-6 py-3 max-lines text-justify  min-w-[500px] lg:min-w-[300px] ">
+                        {{product.description}}
+                    </td>
+                    <ng-container *ngFor="let cat of catList;">
+                        <td class="px-6 py-3 whitespace-nowrap " *ngIf="product.category?._id== cat._id">
+                            {{cat.name}}
+                        </td>
+                    </ng-container>
+                    <td class="px-6 py-3 whitespace-nowrap">
+                        {{product.price |currency:" EGP "}}
+                    </td>
+                    <td class="px-6 py-3 whitespace-nowrap">
+                        <ng-container [ngSwitch]="product.countInStock">
+                            <div *ngSwitchCase="0"> Sold</div>
+                            <div *ngSwitchCase="1"> last item</div>
+                            <div *ngSwitchDefault> {{product.countInStock}}</div>
+
+                        </ng-container>
+                    </td>
+                    <td class="px-5 py-3 whitespace-nowrap ">
+                        <span
+                            class=" px-2 mx-1 py-2 cursor-pointer hover:bg-green-700 duration-1000 edite--icon rounded-md"
+                            (click)="openEditModal(product)"> <i class="bi bi-pen text-green-800 text-xl"></i></span>
+                        <span
+                            class=" px-2 mx-1 py-2 cursor-pointer hover:bg-red-800  duration-1000 edite--icon rounded-md"
+                            (click)="deleteProduct(product.id)"> <i
+                                class="bi bi-trash3 text-red-800 text-xl"></i></span>
+                    </td>
+                </tr>
+            </tbody>
+        
+            <app-addproduct *ngIf="isOpen" [switchAction]=changeAction [productObject]=prodModel
+                (changeToggle)="togleValChanged($event)"></app-addproduct>
+        </table>
+
+    </div>
+    <div class="my-5 flex justify-end  ">
+        <pagination-controls class="bg-slate-200 rounded-md pt-3 " id="listig-products" [maxSize]="15" [directionLinks]="true"
+            (pageChange)="page=$event">
+        </pagination-controls>
+    </div>
+
+</div>

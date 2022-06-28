@@ -1,0 +1,10 @@
+.max-lines {
+    text-overflow: ellipsis;
+    /* will make [...] at the end */
+    /* max-width: 400px;   
+    min-width: 300px; */
+    white-space: wrap;
+    /* paragraph to one line */
+
+}
+

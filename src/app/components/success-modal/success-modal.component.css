@@ -1,0 +1,16 @@
+
+.success--modal--open {
+    transform: translateY(10%);
+    visibility: visible;
+
+
+    /* transform: translatey(-10%); */
+    transition: all 0.3s;
+}
+
+.success--modal--close {
+    transform: translateY(-100%);
+    visibility: hidden;
+    transition: all 0.3s;
+    
+}

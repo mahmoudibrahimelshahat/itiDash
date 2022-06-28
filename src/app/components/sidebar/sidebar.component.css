@@ -1,0 +1,42 @@
+li {
+    transition: all 0.3s ;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    border: 1px solid transparent ;
+}
+
+li:hover {
+    color: #fff;
+    background-color: #ff893b;
+    /* border: 1px solid #F66B0E ; */
+}
+.active{
+    color: #fff;
+    background-color: #ff893b;
+
+}
+
+aside:hover span {
+    display: inline-block;
+}
+
+aside:hover li {
+    text-align: left;
+}
+
+.sidebar--open{
+    opacity: 1;
+    display: block;
+    transform: translatex(-50%);
+    transition: all 0.3s ;
+    visibility: hidden; 
+}
+
+.sidebar--close{
+    opacity: 0;
+    text-align: center;
+    transform: translatex(-50%);
+    transition: all 0.3s ;
+    visibility: hidden; 
+
+}

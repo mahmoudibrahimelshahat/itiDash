@@ -1,0 +1,119 @@
+<!-- table of order -->
+<div class=" container m-auto pb-6 pt-10 ">
+    <div class=" overflow-x-auto shadow-md w-full rounded-xl  ">
+        <table class=" w-full text-left bg-white capitalize text-gray-700  md:text-base text-sm">
+            <thead class="text-sm uppercase   ">
+                <tr class="border-slate-100 bg-[#fdfdfd] text-left text-slate-500  ">
+                    <th scope="col" class="px-6 py-5  whitespace-nowrap">order no.</th>
+                    <th scope="col" class="px-6 py-3  whitespace-nowrap  ">date
+                        <i class="bi bi-caret-up-fill x px-2 inline-block cursor-pointer"
+                            (click)="sortByDate($event)"></i>
+                    </th>
+                    <th scope="col" class="px-6 py-3  whitespace-nowrap">price
+                        <i class="bi bi-caret-up-fill x px-2 inline-block cursor-pointer"
+                            (click)="sortByPrice($event)"></i>
+                    </th>
+                    <th scope="col" class="px-6 py-3  whitespace-nowrap"> status </th>
+                    <th scope="col" class="px-6 py-3  whitespace-nowrap"> customer name</th>
+                    <th scope="col" class="px-6 py-3  whitespace-nowrap "> email</th>
+                    <th scope="col" class="px-6 py-3 whitespace-nowrap "> change status</th>
+
+                </tr>
+            </thead>
+            <tbody class="">
+                <tr *ngFor="let order of orderList|paginate: { id:'listig-orders',
+                itemsPerPage: 8,
+                currentPage: page,
+                totalItems: totalOrders}" class="  border-t-[0.5px]    ">
+                    <td class="flex items-center px-6  py-3 whitespace-nowrap   ">
+                        <div class=""> #{{order._id|slice:1:10}}</div>
+
+                    </td>
+
+                    <td class="px-6 py-3 max-lines text-justify whitespace-nowrap  ">
+                        {{order.dateOrdered|date}}
+
+                    </td>
+
+                    <td class="px-6 py-3 whitespace-nowrap">
+                        {{order.totalPrice|currency:'EGP '}}
+
+                    </td>
+                    <td class="px-6 py-3 whitespace-nowrap">
+                        <ng-container [ngSwitch]="order.status">
+                            <div *ngSwitchCase="0"> pending</div>
+                            <div *ngSwitchCase="1"> shipped</div>
+                            <div *ngSwitchCase="2">delivered </div>
+                        </ng-container>
+                    </td>
+
+                    <td class="px-6 py-3 whitespace-nowrap">
+                        {{order.firstName}} {{order.lastName}}
+
+                    </td>
+                    <td class="px-6 py-3 whitespace-nowrap">
+                        {{order.email}}
+                    </td>
+
+                    <td class="px-6 py-3 whitespace-nowrap text-center">
+                        <span (click)="openModal(order)"
+                            class=" px-2 mx-1 py-2 cursor-pointer hover:bg-green-700 duration-1000 edite--icon rounded-md">
+                            <i class="bi bi-pen text-green-800 text-xl"></i></span>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="my-5 flex justify-end  ">
+        <pagination-controls class="bg-slate-200 rounded-md pt-3 " id="listig-orders" [maxSize]="15" [directionLinks]="true"
+            (pageChange)="page=$event">
+        </pagination-controls>
+    </div>
+
+</div>
+
+
+
+
+<!-- edite status form -->
+<div #modal [ngClass]="{'hidden':!modalIsOpen ,'block':modalIsOpen}"
+    class=" fixed left-0 top-0 bottom-0 right-0 bg-black bg-opacity-30 w-full z-40 flex items-center align-middle ">
+
+    <div
+        class=" mb-7 p-6 rounded-xl shadow-lg  w-[450px] sm:w-[550px] m-auto  bg-white  h-fit relative top-[-50%] translate-y-[50%]  z-50 ">
+        <div class="flex justify-between items-baseline mb-10 ">
+            <div class="text-xl text-gray-500">update status</div>
+            <div class="cursor-pointer border-[0.3px] hover:bg-[#ff893b] px-3 py-1 rounded-md text-lg hover:text-white hover:border-white duration-200"
+                (click)="closeModal(modal)">x</div>
+        </div>
+        <form [formGroup]="orderForm" class=" capitalize  ">
+            <div class=" mb-0">
+                <div class="input--group">
+                    <select
+                        [ngClass]="{'test':!orderName?.valid, 'border-gray-300':orderName?.untouched ,'border-red-600':!orderName?.valid&&orderName?.touched ,'border-blue-400':orderName?.valid}"
+                        type="text" formControlName="status"
+                        class=" cursor-text mt-2 block w-full px-1 py-1.5 text-base font-normal  text-gray-700 bg-white border  rounded outline-none">
+                        <option class=" cursor-pointer text-base font-normal  text-gray-600 bg-white  rounded"
+                            value="0">pending</option>
+                        <option class=" cursor-pointer text-base font-normal  text-gray-600 bg-white  rounded"
+                            value="1">shipped</option>
+                        <option class=" cursor-pointer text-base font-normal  text-gray-600 bg-white  rounded"
+                            value="2">delivered</option>
+                    </select>
+                    <label [ngClass]="{'input--label':!orderName?.valid ,'labelX':orderName?.valid}"
+                        class="label text-gray-700 input--label ">select status</label>
+                    <div [hidden]="orderName?.valid||orderName?.untouched" class="text-red-600 ">
+                        <small *ngIf="orderName?.errors?.['required']"> required</small>
+                    </div>
+                </div>
+            </div>
+            <div class=" flex justify-end mt-6">
+                <button (click)="edite(modal)" type="submit" [disabled]="orderForm.invalid"
+                class=" disabled:cursor-not-allowed px-7 py-2.5 bg-[#ff893b]  text-white font-medium text-xs leading-tight uppercase rounded shadow-md">update</button>
+                <button (click)="closeModal(modal)" type="button"
+                    class=" px-6 py-2.5 ml-3  font-medium text-xs leading-tight uppercase rounded shadow-md border-[0.5px] border-[#ff893b]">Cancle</button>
+            </div>
+        </form>
+    </div>
+</div>

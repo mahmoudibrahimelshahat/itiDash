@@ -1,0 +1,42 @@
+<div #modal
+    class=" fixed left-0 top-0 bottom-0 right-0 bg-black bg-opacity-30 w-full z-40 flex items-center align-middle ">
+
+    <div
+        class=" mb-7 p-6 rounded-xl shadow-lg  w-[450px] sm:w-[550px] m-auto  bg-white  h-fit relative top-[-50%] translate-y-[50%]  z-50 ">
+        <div class="flex justify-between items-baseline mb-10 ">
+
+            <div *ngIf="!isEditModal" class="text-xl text-gray-500">Add New category</div>
+            <div *ngIf="isEditModal" class="text-xl text-gray-500">update category</div>
+            <div class="cursor-pointer border-[0.3px] hover:bg-[#ff893b] px-3 py-1 rounded-md text-lg hover:text-white hover:border-white duration-200"
+                (click)="closeModal(modal)">x</div>
+        </div>
+        <form [formGroup]="categoryForm" class=" capitalize  ">
+            <div class=" mb-10 ">
+                <div class=" input--group">
+                    <input
+                        [ngClass]="{'test':!categName?.valid, 'border-gray-300':categName?.untouched ,'border-red-600':!categName?.valid&&categName?.touched ,'border-blue-400':categName?.valid}"
+                        formControlName="name"
+                        class=" mt-2 block w-full px-[10px] py-1.5 text-base font-normal   text-gray-700 bg-white  border border-solid  rounded outline-none   ">
+                    <label [ngClass]="{'input--label':!categName?.valid ,'labelX':categName?.valid}"
+                        class="label text-gray-700 input--label">category name</label>
+
+                </div>
+                <div [hidden]="categName?.valid||categName?.untouched" class="text-red-600 ">
+                    <small *ngIf="categName?.errors?.['required']"> required</small>
+                </div>
+                <div class="text-red-600">
+                    <small *ngIf="alreadyExist"> this category already exist</small>
+                </div>
+            </div>
+            <div class=" flex justify-end mt-6">
+                <button (click)="submitNewCategory(modal)" *ngIf="!isEditModal" type="submit"
+                    [disabled]="categoryForm.invalid"
+                    class=" disabled:cursor-not-allowed px-7 py-2.5 bg-[#ff893b]  text-white font-medium text-xs leading-tight uppercase rounded shadow-md">save</button>
+                <button (click)="edite(modal)" *ngIf="isEditModal" type="submit" [disabled]="categoryForm.invalid"
+                    class=" disabled:cursor-not-allowed px-7 py-2.5 bg-[#ff893b]  text-white font-medium text-xs leading-tight uppercase rounded shadow-md">update</button>
+                <button (click)="closeModal(modal)" type="button"
+                    class=" px-6 py-2.5 ml-3  font-medium text-xs leading-tight uppercase rounded shadow-md border-[0.5px] border-[#ff893b]">Cancle</button>
+            </div>
+        </form>
+    </div>
+</div>

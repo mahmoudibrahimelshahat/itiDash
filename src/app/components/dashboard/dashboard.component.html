@@ -1,0 +1,118 @@
+<div class="text-slate-700 capitalize">
+    <!--dashboard information cart-->
+    <div class="flex gap-5 md:text-base text-[16]   ">
+        <div
+            class="flex md:flex-row flex-col justify-center w-4/12 items-center bg-white rounded-xl  lg:py-8 shadow-md gap-5  ">
+            <div class="flex flex-col ">
+                <span class="  md:text-[20px]  whitespace-nowrap font-medium"> {{ totalRev|currency:" EGP "}}</span>
+                <span class="text-slate-500 ">total sales</span>
+            </div>
+            <div class="w-[50px] h-[50px] rounded-full bg-yellow-100 flex justify-center items-center ">
+                <i class="bi bi-basket-fill text-amber-500"></i>
+            </div>
+        </div>
+
+        <div
+            class="flex md:flex-row flex-col justify-center w-4/12 items-center bg-white rounded-xl  py-8 shadow-md gap-5  ">
+            <div class="flex flex-col ">
+                <span class=" md:text-[20px]  whitespace-nowrap font-medium"> {{ productsCount }} </span>
+                <span class="text-slate-500 ">total products</span>
+            </div>
+            <div class="w-[50px] h-[50px] rounded-full bg-teal-100 flex justify-center items-center ">
+                <i class="bi-tag-fill text-teal-500"></i>
+            </div>
+
+        </div>
+
+        <div
+            class="flex md:flex-row flex-col justify-center w-4/12 items-center bg-white rounded-xl  py-8 shadow-md gap-5  ">
+            <div class="flex flex-col ">
+                <span class=" md:text-[20px] whitespace-nowrap font-medium"> {{ usersCount}}</span>
+                <span class="text-slate-500 ">customers no.</span>
+            </div>
+            <div class="w-[50px] h-[50px] rounded-full bg-blue-100 flex justify-center items-center ">
+                <i class="bi bi-people-fill text-blue-500"></i>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- second section includes bar chart and latest order -->
+    <div class="flex md:flex-row  flex-col justify-between  my-10 gap-5 ">
+        <!--line chart section -->
+        <div class=" w-12/12 md:w-6/12  lg:w-8/12 bg-white rounded-xl px-5">
+            <canvas id="lineChart" class="md:w-6/12 w-full "></canvas>
+        </div>
+
+        <!--latest order-->
+        <div class=" md:w-6/12 lg:w-4/12 bg-white rounded-xl px-5 lg:px-3 whitespace-nowrap md:text-base text-sm">
+            <div class="pl-3 py-2  lg:text-lg text-slate-600 font-medium">latest order</div>
+            <div *ngFor="let order of orderList | slice:0:5 " class="flex flex-row justify-between p-1 my-2  ">
+                <div class=" flex items-center">
+                    <span class="flex p-2 w-[50px] h-[50px] rounded-full bg-yellow-100 justify-center items-center"> <i
+                            class="bi bi-basket-fill text-amber-500"></i></span>
+                    <div class="flex flex-col pl-2">
+                        <span class="text-slate-700">#{{order._id|slice:1:9}}</span>
+                        <span class="text-slate-400">{{order.dateOrdered|date}}</span>
+                    </div>
+                </div>
+                <span>{{order.totalPrice|currency:"EGP "}}</span>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- third section, latest products -->
+    <div class="pl-3 py-2  lg:text-lg text-slate-600 font-medium">latest products</div>
+    <div class=" overflow-x-auto shadow-md w-full rounded-xl  ">
+        <table class=" w-full text-left bg-white capitalize text-gray-700  md:text-base text-sm">
+            <thead class="text-sm uppercase   ">
+                <tr class="border-slate-100 bg-[#ff893b] text-left text-white  ">
+                    <th scope="col" class="px-6 py-5  pl-5">image </th>
+                    <th scope="col" class="px-6 py-3  pl-5">name </th>
+                    <th scope="col" class="px-6 py-3">category</th>
+                    <th scope="col" class="px-6 py-3 "> price</th>
+                    <th scope="col" class="px-6 py-3 whitespace-nowrap">stock </th>
+                </tr>
+            </thead>
+            <tbody class="">
+                <tr class="  border-t-[0.5px] " *ngFor=" let product of productList |slice:0:5 ">
+                    <td class="flex items-center pl-6 pr-10 py-3 whitespace-nowrap   ">
+                        <div class="w-10 h-10 rounded-full">
+                            <img class="w-10 h-10 rounded-full" [src]="product.image">
+                        </div>
+                    </td>
+                    <td class="px-6 py-3  text-justify whitespace-nowrap ">
+                        {{product.name}}
+                    </td>
+                    <ng-container *ngFor="let cat of catList;">
+                        <td class="px-6 py-3 whitespace-nowrap " *ngIf="product.category?._id== cat._id">
+                            {{cat.name}}
+                        </td>
+                    </ng-container>
+                    <td class="px-6 py-3 whitespace-nowrap">
+                        {{product.price |currency:" EGP "}}
+                    </td>
+                    <td class="px-6 py-3 whitespace-nowrap">
+                        <ng-container [ngSwitch]="product.countInStock">
+                            <div *ngSwitchCase="0"> Sold</div>
+                            <div *ngSwitchCase="1"> last item</div>
+                            <div *ngSwitchDefault> {{product.countInStock}}</div>
+
+                        </ng-container>
+                    </td>
+
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+<!-- <div class=" w-full md:w-[48%] bg-white rounded-xl px-5 flex align-middle justify-center">
+                <canvas id="pieChart" class="w-6/12"></canvas>
+            </div> -->

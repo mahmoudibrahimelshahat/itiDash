@@ -1,0 +1,15 @@
+<aside [ngClass]="{'hidden':!showSideBar,'block':showSideBar}"
+    class="bg-[#fafbfc] h-full xl:left-[20px] left-0 py-10 md:py-6 shadow-md rounded-xl fixed  top-[58px] md:top-[100px] xl:w-[240px] md:w-[10%] w-[240px]  md:block  md:hover:w-[240px] transition-all duration-[170ms]">
+    <ul class="px-5 text-lg font-medium whitespace-nowrap  ">
+        <li routerLinkActive="active "  class="px-3 py-2 mb-3 text-gray-600 md:text-center xl:text-left"><a class="block" routerLink="/dashboard">
+                <i class="bi bi-columns-gap"></i><span class="pl-4 md:hidden xl:inline-block ">Dashboard</span></a></li>
+        <li routerLinkActive="active "  class=" px-3 py-2 mb-3 text-gray-600  md:text-center xl:text-left"> <a class="block" routerLink="/products">
+                <i class="bi bi-file-spreadsheet"></i> <span
+                    class="pl-4  md:hidden xl:inline-block ">Products</span></a></li>
+        <li routerLinkActive="active "  class=" px-3 py-2 mb-3 text-gray-600  md:text-center xl:text-left"> <a class="block"
+                routerLink="/categories"> <i class="bi bi-grid-3x3-gap"></i><span
+                    class="pl-4  md:hidden xl:inline-block">Categories</span></a></li>
+        <li routerLinkActive="active " class=" px-3 py-2 mb-3 text-gray-600  md:text-center xl:text-left"><a class="block" routerLink="/orders"> <i
+                    class="bi bi-file-text"></i><span class="pl-4  md:hidden xl:inline-block">Orders</span></a></li>
+    </ul>
+</aside>
